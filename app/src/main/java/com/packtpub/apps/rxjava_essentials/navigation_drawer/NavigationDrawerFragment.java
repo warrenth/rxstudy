@@ -1,7 +1,5 @@
 package com.packtpub.apps.rxjava_essentials.navigation_drawer;
 
-import com.packtpub.apps.rxjava_essentials.R;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -17,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.packtpub.apps.rxjava_essentials.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -187,6 +187,8 @@ public class NavigationDrawerFragment extends Fragment implements NavigationDraw
         items.add(new NavigationItem("Network task", getResources().getDrawable(R.drawable.ic_action_playback_schuffle)));
 
         items.add(new NavigationItem("Stack Overflow", getResources().getDrawable(R.drawable.ic_action_android)));
+
+        items.add(new NavigationItem("My Sample", getResources().getDrawable(R.drawable.ic_action_android)));
 
         return items;
     }

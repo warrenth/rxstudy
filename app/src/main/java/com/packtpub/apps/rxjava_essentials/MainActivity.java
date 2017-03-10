@@ -1,5 +1,14 @@
 package com.packtpub.apps.rxjava_essentials;
 
+import android.app.FragmentManager;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.StrictMode;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+
 import com.packtpub.apps.rxjava_essentials.chapter4.DistinctExampleFragment;
 import com.packtpub.apps.rxjava_essentials.chapter4.FilterExampleFragment;
 import com.packtpub.apps.rxjava_essentials.chapter4.TakeExampleFragment;
@@ -18,17 +27,9 @@ import com.packtpub.apps.rxjava_essentials.chapter8.SoActivity;
 import com.packtpub.apps.rxjava_essentials.example1.FirstExampleFragment;
 import com.packtpub.apps.rxjava_essentials.example2.SecondExampleFragment;
 import com.packtpub.apps.rxjava_essentials.example3.ThirdExampleFragment;
+import com.packtpub.apps.rxjava_essentials.mysample.FirstSampleFragment;
 import com.packtpub.apps.rxjava_essentials.navigation_drawer.NavigationDrawerCallbacks;
 import com.packtpub.apps.rxjava_essentials.navigation_drawer.NavigationDrawerFragment;
-
-import android.app.FragmentManager;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.StrictMode;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -165,6 +166,11 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerC
                 break;
             case 17:
                 startActivity(new Intent(this, SoActivity.class));
+                break;
+            case 18:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new FirstSampleFragment())
+                        .commit();
                 break;
         }
     }

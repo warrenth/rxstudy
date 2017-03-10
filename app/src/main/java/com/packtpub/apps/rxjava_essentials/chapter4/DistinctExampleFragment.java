@@ -1,10 +1,5 @@
 package com.packtpub.apps.rxjava_essentials.chapter4;
 
-import com.packtpub.apps.rxjava_essentials.apps.ApplicationsList;
-import com.packtpub.apps.rxjava_essentials.R;
-import com.packtpub.apps.rxjava_essentials.apps.AppInfo;
-import com.packtpub.apps.rxjava_essentials.apps.ApplicationAdapter;
-
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -16,8 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.packtpub.apps.rxjava_essentials.R;
+import com.packtpub.apps.rxjava_essentials.apps.AppInfo;
+import com.packtpub.apps.rxjava_essentials.apps.ApplicationAdapter;
+import com.packtpub.apps.rxjava_essentials.apps.ApplicationsList;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -72,7 +73,7 @@ public class DistinctExampleFragment extends Fragment {
         mRecyclerView.setVisibility(View.VISIBLE);
 
         Observable<AppInfo> fullOfDuplicates = Observable.from(apps)
-                .take(3)
+                .sample(3, TimeUnit.SECONDS)
                 .repeat(3);
 
         fullOfDuplicates.distinct()

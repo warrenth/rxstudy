@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,35 +83,50 @@ public class FirstExampleFragment extends Fragment {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(file -> {
+                    Log.d("warrenth","Observer getFileDir() Next");
                     mFilesDir = file;
                     refreshTheList();
+                }, error -> {
+                    Log.d("warrenth","Observer getFileDir() error");
+                }, () -> {
+                    Log.d("warrenth","Observer getFileDir() Complete");
                 });
     }
 
     private Observable<File> getFileDir() {
         return Observable.create(subscriber -> {
-            subscriber.onNext(App.instance.getFilesDir());
+            Log.d("warrenth","Observable Call getFileDir() start : " + subscriber.isUnsubscribed());
+            if(subscriber.isUnsubscribed()) {
+                return;
+            }
+            Log.d("warrenth","Observable Call getFileDir() ing : " + subscriber.isUnsubscribed());
+            subscriber.onNext(App.instance.getFilesDir()); //aync
             subscriber.onCompleted();
+            Log.d("warrenth","Observable Call getFileDir() end : " + subscriber.isUnsubscribed());
         });
     }
 
     private void refreshTheList() {
+        Log.d("warrenth","refreshTheList()");
         getApps()
                 .toSortedList()
                 .subscribe(new Observer<List<AppInfo>>() {
                     @Override
                     public void onCompleted() {
+                        Log.d("warrenth","Observer refreshTheList() onCompleted()");
                         Toast.makeText(getActivity(), "Here is the list!", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        Log.d("warrenth","Observer refreshTheList() onError()");
                         Toast.makeText(getActivity(), "Something went wrong!", Toast.LENGTH_SHORT).show();
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
 
                     @Override
                     public void onNext(List<AppInfo> appInfos) {
+                        Log.d("warrenth","Observer refreshTheList() onNext()");
                         mRecyclerView.setVisibility(View.VISIBLE);
                         mAdapter.addApplications(appInfos);
                         mSwipeRefreshLayout.setRefreshing(false);
@@ -132,6 +148,7 @@ public class FirstExampleFragment extends Fragment {
 
     private Observable<AppInfo> getApps() {
         return Observable.create(subscriber -> {
+            Log.d("warrenth","Observable Call getApps() start ");
             List<AppInfoRich> apps = new ArrayList<>();
 
             final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
@@ -148,9 +165,11 @@ public class FirstExampleFragment extends Fragment {
                 String iconPath = mFilesDir + "/" + name;
                 Utils.storeBitmap(App.instance, icon, name);
 
+                Log.d("warrenth","Observable Call getApps() for 1 : " + name);
                 if (subscriber.isUnsubscribed()) {
                     return;
                 }
+
                 subscriber.onNext(new AppInfo(name, iconPath, appInfo.getLastUpdateTime()));
             }
             if (!subscriber.isUnsubscribed()) {
